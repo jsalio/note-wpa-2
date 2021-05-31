@@ -1,6 +1,6 @@
-import { Collapse, Row } from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { ApplicationContext } from "../context/Application.context";
+import React, { useContext, useEffect, useState } from 'react';
+import { ApplicationContext } from '../context/Application.context';
+import { Collapse } from 'antd';
 
 const Panel = Collapse.Panel;
 

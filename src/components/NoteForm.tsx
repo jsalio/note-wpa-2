@@ -1,10 +1,15 @@
-import { Card, Input, Modal, Row } from "antd"
-import TextArea from "antd/lib/input/TextArea"
-import React, { useEffect, useState } from "react"
-import { ApplicationContext } from "../context/Application.context"
-import { Note } from "../models/db/note"
-import { transactionStatus } from "../models/enum/transaction-status"
-import { generateGuid } from "../utils/guid"
+import React, { useEffect, useState } from 'react';
+import TextArea from 'antd/lib/input/TextArea';
+import { ApplicationContext } from '../context/Application.context';
+import {
+    Card,
+    Input,
+    Modal,
+    Row
+} from 'antd';
+import { generateGuid } from '../utils/guid';
+import { Note } from '../models/db/note';
+import { transactionStatus } from '../models/enum/transaction-status';
 
 
 export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean, setModalVisible: (state: boolean) => void }> = (prop) => {
