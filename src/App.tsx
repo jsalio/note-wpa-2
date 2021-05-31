@@ -1,13 +1,15 @@
-import './App.css';
 import { ApplicationContext } from './context/Application.context';
-import { BuildChecker } from './checker';
-import { NoteContext } from './Data/note.context';
-import 'antd/dist/antd.css';
-import { NoteList } from './components/List';
-import { FormNote } from './components/NoteForm';
-import { useState } from 'react';
+import { BuildChecker } from './components/checker';
 import { Button } from 'antd';
+import { EventDataContext } from './Data/event.context';
 import { FileAddOutlined } from '@ant-design/icons';
+import { FormNote } from './components/NoteForm';
+import { NoteContext } from './Data/note.context';
+import { NoteList } from './components/List';
+import { useState } from 'react';
+import './App.css';
+import 'antd/dist/antd.css';
+import { PendingTransaction } from './components/pending-transaction';
 
 function App() {
 
@@ -18,6 +20,7 @@ function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const initialContext = {
     noteTable: new NoteContext(),
+    eventTable: new EventDataContext(),
     noteToEdit: note,
     setNote: setNote
   }
@@ -28,6 +31,7 @@ function App() {
         <div className={'floatButtonOverTable'}><Button onClick={() => setIsModalVisible(true)}><FileAddOutlined /> Add note</Button></div>
         <FormNote online={d.callBackState} modalIsVisible={isModalVisible} setModalVisible={setIsModalVisible} />
         <NoteList online={d.callBackState} setModalVisible={setIsModalVisible} />
+        <PendingTransaction online={d.callBackState} />
       </ApplicationContext.Provider>
     </div>
   );
