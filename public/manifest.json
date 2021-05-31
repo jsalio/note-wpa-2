@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "WPA-Notes",
+  "name": "Sample note editor using WPA",
   "icons": [
     {
       "src": "favicon.ico",

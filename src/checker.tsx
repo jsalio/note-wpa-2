@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Detector } from "react-detect-offline";
+import { WifiOutlined, GlobalOutlined } from '@ant-design/icons';
 
 type ConnectionChecker = {
     view: JSX.Element,
@@ -12,7 +13,7 @@ export const BuildChecker = (): ConnectionChecker => {
         view: (<p>
             <Detector render={({ online }) => {
                 setOnline(online)
-                return <div>{online ? 'Online' : 'Offline'}</div>
+                return <div>{online ? <span> <WifiOutlined /> Online</span> : <span><GlobalOutlined /> Offline</span>}</div>
             }} />
         </p>),
         callBackState: () => online

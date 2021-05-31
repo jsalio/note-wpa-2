@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.floatButtonOverTable{
+  z-index: 999;
+  position: absolute;
+  margin-right: 0px;
+  margin-left: 94%;
+  margin-top: 9px;
+}

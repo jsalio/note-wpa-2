@@ -1,6 +1,7 @@
 import { Button, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { ApplicationContext } from "../context/Application.context";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Note } from "../models/db/note";
 import { generateGuid } from "../utils/guid";
 
@@ -44,8 +45,8 @@ export const NoteList: React.FC<{ online: () => boolean, setModalVisible: (state
             title: 'Action',
             key: 'action',
             render: (text, record: Note) => (<div>
-                <Button onClick={() => removeRecord(record)}>Remove</Button>
-                <Button onClick={() => editRecord(record)}>Edit</Button>
+                <Button onClick={() => removeRecord(record)}><DeleteOutlined /> Remove</Button>
+                <Button onClick={() => editRecord(record)}><EditOutlined /> Edit</Button>
             </div>)
         },
     ];
