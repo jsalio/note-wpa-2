@@ -1,17 +1,40 @@
-import { Button, Col, Popconfirm, Row, Table } from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { ApplicationContext } from "../context/Application.context";
+import React, { useContext, useEffect, useState } from 'react';
+import { ApplicationContext } from '../context/Application.context';
+import {
+    Button,
+    Col,
+    Popconfirm,
+    Row,
+    Table
+} from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Note } from "../models/db/note";
-import { generateGuid } from "../utils/guid";
+import { generateGuid } from '../utils/guid';
+import { Note } from '../models/db/note';
 
 export const NoteList: React.FC<{ online: () => boolean, setModalVisible: (state: boolean) => void }> = (prop) => {
-    const { noteTable, setNote } = useContext(ApplicationContext);
+    const { noteTable, eventTable, setNote } = useContext(ApplicationContext);
     const [dataSet, setDataset] = useState(new Array<Note>())
 
     const removeRecord = (note: Note) => {
         console.log(`Remove record ${note.id}`)
-        noteTable.deleteNote(note.id)
+        if (!prop.online()) {
+            eventTable.addEvent(`__del_note_${note.id}@${note.name}`, {
+                EventName: `__del_note_${note.id}@${note.name}`,
+                promise: {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'pragma': 'no-cache',
+                        'cache-control': 'no-cache'
+                    },
+                    body: JSON.stringify(note)
+                }
+            }).then(() => {
+                noteTable.deleteNote(note.id)
+            })
+        } else {
+            noteTable.deleteNote(note.id)
+        }
     }
 
     const editRecord = (note: Note) => {

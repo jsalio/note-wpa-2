@@ -1,10 +1,15 @@
-import { Card, Input, Modal, Row } from "antd"
-import TextArea from "antd/lib/input/TextArea"
-import React, { useEffect, useState } from "react"
-import { ApplicationContext } from "../context/Application.context"
-import { Note } from "../models/db/note"
-import { transactionStatus } from "../models/enum/transaction-status"
-import { generateGuid } from "../utils/guid"
+import React, { useEffect, useState } from 'react';
+import TextArea from 'antd/lib/input/TextArea';
+import { ApplicationContext } from '../context/Application.context';
+import {
+    Card,
+    Input,
+    Modal,
+    Row
+} from 'antd';
+import { generateGuid } from '../utils/guid';
+import { Note } from '../models/db/note';
+import { transactionStatus } from '../models/enum/transaction-status';
 
 
 export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean, setModalVisible: (state: boolean) => void }> = (prop) => {
@@ -12,7 +17,7 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
     const [author, setAuthor] = useState('')
     const [details, setDetails] = useState('')
     const [isEditMode, setEditMode] = useState(false);
-    var { noteTable, noteToEdit, setNote } = React.useContext(ApplicationContext)
+    var { noteTable, eventTable, noteToEdit, setNote } = React.useContext(ApplicationContext)
 
     useEffect(() => {
         if (noteToEdit !== undefined) {
@@ -33,6 +38,26 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
             text: details,
             transactionStatus: transactionStatus.pending
         }
+        if (!prop.online()) {
+            eventTable.addEvent(`__add_note_${note.id}@${note.name}`, {
+                EventName: `__add_note_${note.id}@${note.name}`,
+                promise: {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'pragma': 'no-cache',
+                        'cache-control': 'no-cache'
+                    },
+                    body: JSON.stringify(note)
+                }
+            }).then(() =>
+                noteTable.addNote(note.id, note).then(() => {
+                    setName('');
+                    setAuthor('');
+                    setDetails('');
+                    prop.setModalVisible(false)
+                }))
+        }
         noteTable.addNote(note.id, note).then(() => {
             setName('');
             setAuthor('');
@@ -46,13 +71,40 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
         noteToEdit.author = author;
         noteToEdit.name = name;
         noteToEdit.text = details;
-        noteTable.addNote(noteToEdit.id, noteToEdit).then(() => {
-            setName('');
-            setAuthor('');
-            setDetails('');
-            setEditMode(false)
-            prop.setModalVisible(false)
-        })
+
+        if (!prop.online()) {
+            eventTable.addEvent(`__update_note_${noteToEdit.id}@${noteToEdit.name}`, {
+                EventName: `__update_note_${noteToEdit.id}@${noteToEdit.name}`,
+                promise: {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'pragma': 'no-cache',
+                        'cache-control': 'no-cache'
+                    },
+                    body: JSON.stringify(noteToEdit)
+                }
+            }).then(() => {
+                noteTable.addNote(noteToEdit.id, noteToEdit).then(() => {
+                    setName('');
+                    setAuthor('');
+                    setDetails('');
+                    setEditMode(false)
+                    prop.setModalVisible(false)
+                })
+            })
+
+        } else {
+            noteTable.addNote(noteToEdit.id, noteToEdit).then(() => {
+                setName('');
+                setAuthor('');
+                setDetails('');
+                setEditMode(false)
+                prop.setModalVisible(false)
+            })
+        }
+
+
 
     }
 
