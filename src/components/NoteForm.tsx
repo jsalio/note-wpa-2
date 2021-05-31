@@ -68,7 +68,7 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
     }
 
     return <Modal
-        title="Add new note"
+        title={isEditMode ? `Edit note ${noteToEdit.id}` : "Add new note"}
         centered
         visible={prop.modalIsVisible}
         onOk={isEditMode ? handlerClickEdit : handlerClickSave}
@@ -90,7 +90,7 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
                 <Input placeholder="Author" value={author} onChange={(e) => setAuthor(e.target.value)} />
             </Row>
             <Row>
-                <TextArea placeholder="Details" value={details} onChange={(e) => setDetails(e.target.value)} />
+                <TextArea style={{ height: '600px' }} placeholder="Details" value={details} onChange={(e) => setDetails(e.target.value)} />
             </Row>
         </Card>
     </Modal>

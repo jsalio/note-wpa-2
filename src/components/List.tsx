@@ -1,6 +1,7 @@
-import { Button, Table } from "antd";
+import { Button, Col, Popconfirm, Row, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { ApplicationContext } from "../context/Application.context";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Note } from "../models/db/note";
 import { generateGuid } from "../utils/guid";
 
@@ -43,9 +44,17 @@ export const NoteList: React.FC<{ online: () => boolean, setModalVisible: (state
         {
             title: 'Action',
             key: 'action',
-            render: (text, record: Note) => (<div>
-                <Button onClick={() => removeRecord(record)}>Remove</Button>
-                <Button onClick={() => editRecord(record)}>Edit</Button>
+            render: (text, record: Note) => (<div style={{ textAlign: 'right' }}>
+                <Row>
+                    <Col span={12} />
+                    <Col span={6}><Button type={'primary'} onClick={() => editRecord(record)}><EditOutlined /> Edit</Button></Col>
+                    <Col span={6}>
+                        <Popconfirm placement="topLeft" title={`Are you sure remove note ${record.id}`} onConfirm={() => removeRecord(record)} okText="Yes" cancelText="No">
+                            <Button danger><DeleteOutlined /> Remove
+                        </Button>
+                        </Popconfirm>
+                    </Col>
+                </Row>
             </div>)
         },
     ];
