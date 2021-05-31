@@ -68,7 +68,7 @@ export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean
     }
 
     return <Modal
-        title="Add new note"
+        title={isEditMode ? `Edit note ${noteToEdit.id}` : "Add new note"}
         centered
         visible={prop.modalIsVisible}
         onOk={isEditMode ? handlerClickEdit : handlerClickSave}
