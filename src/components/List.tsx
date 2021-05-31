@@ -4,7 +4,7 @@ import { ApplicationContext } from "../context/Application.context";
 import { Note } from "../models/db/note";
 import { generateGuid } from "../utils/guid";
 
-export const NoteList: React.FC<{ online: () => boolean }> = (prop) => {
+export const NoteList: React.FC<{ online: () => boolean, setModalVisible: (state: boolean) => void }> = (prop) => {
     const { noteTable, setNote } = useContext(ApplicationContext);
     const [dataSet, setDataset] = useState(new Array<Note>())
 
@@ -15,6 +15,7 @@ export const NoteList: React.FC<{ online: () => boolean }> = (prop) => {
 
     const editRecord = (note: Note) => {
         console.log(`edited record ${note.id}`)
+        prop.setModalVisible(true);
         setNote(note)
     }
 
