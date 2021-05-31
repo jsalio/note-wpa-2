@@ -1,50 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { ApplicationContext, Context } from './context/Application.context';
-import { Detector } from "react-detect-offline"
+import { ApplicationContext } from './context/Application.context';
 import { BuildChecker } from './checker';
+import { NoteContext } from './Data/note.context';
+import 'antd/dist/antd.css';
+import { NoteList } from './components/List';
+import { FormNote } from './components/NoteForm';
+import { Note } from './models/db/note';
+import { useState } from 'react';
 
 function App() {
-  const [online, setOnline] = useState(false)
-  const initialContext: Context = {
-    online: online,
-    setOnline: setOnline
-  }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      console.log('Trigger')
-      setOnline(window.navigator.onLine);
-    }, 1000)
-    return () => clearInterval(timer);
-  }, [online])
   const d = BuildChecker()
+  const [note, setNote] = useState({} as Note | undefined)
+  const initialContext = {
+    noteTable: new NoteContext(),
+    noteToEdit: note,
+    setNote: setNote
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <p>
-          {online ? 'Online' : 'Offline'}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-          <p>
-            {d.c}
-            {d.f() ? 'Si' : 'No'}
-          </p>
-        </a>
-      </header>
+      {d.view}
       <ApplicationContext.Provider value={initialContext}>
-
+        <FormNote online={d.callBackState} />
+        <NoteList online={d.callBackState} />
       </ApplicationContext.Provider>
     </div>
   );

@@ -1,13 +1,17 @@
 import React from "react";
+import { NoteContext } from "../Data/note.context";
+import { Note } from "../models/db/note";
 
 export type Context = {
-    online: boolean;
-    setOnline: (status: boolean) => void;
+    noteTable: NoteContext
+    noteToEdit: Note | undefined
+    setNote: (note: Note) => void
 }
 
 const defaultBuild: Context = {
-    online: false,
-    setOnline: (status: boolean) => { }
+    noteTable: new NoteContext(),
+    noteToEdit: undefined,
+    setNote: (note: Note) => { }
 }
 
 export const ApplicationContext = React.createContext(defaultBuild)
