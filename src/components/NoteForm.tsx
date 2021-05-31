@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, Row } from "antd"
+import { Card, Input, Modal, Row } from "antd"
 import TextArea from "antd/lib/input/TextArea"
 import React, { useEffect, useState } from "react"
 import { ApplicationContext } from "../context/Application.context"
@@ -7,7 +7,7 @@ import { transactionStatus } from "../models/enum/transaction-status"
 import { generateGuid } from "../utils/guid"
 
 
-export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
+export const FormNote: React.FC<{ online: () => boolean, modalIsVisible: boolean, setModalVisible: (state: boolean) => void }> = (prop) => {
     const [name, setName] = useState('')
     const [author, setAuthor] = useState('')
     const [details, setDetails] = useState('')
@@ -37,7 +37,9 @@ export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
             setName('');
             setAuthor('');
             setDetails('');
+            prop.setModalVisible(false)
         })
+
     }
 
     const handlerClickEdit = () => {
@@ -49,7 +51,9 @@ export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
             setAuthor('');
             setDetails('');
             setEditMode(false)
+            prop.setModalVisible(false)
         })
+
     }
 
     const handlerCancelForm = () => {
@@ -60,9 +64,24 @@ export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
             setNote(undefined)
             setEditMode(false)
         }
+        prop.setModalVisible(false)
     }
 
-    return <div>
+    return <Modal
+        title="Add new note"
+        centered
+        visible={prop.modalIsVisible}
+        onOk={isEditMode ? handlerClickEdit : handlerClickSave}
+        onCancel={handlerCancelForm}
+        okButtonProps={
+            {
+                disabled: author === '' && name === '' && details === ''
+            }
+        }
+        okText={!isEditMode ? 'Save' : 'Save changes'}
+        cancelText={'Cancel'}
+        width={1000}
+    >
         <Card>
             <Row>
                 <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -73,14 +92,6 @@ export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
             <Row>
                 <TextArea placeholder="Details" value={details} onChange={(e) => setDetails(e.target.value)} />
             </Row>
-            <Row>
-                <Col span={24}>
-                    <Col span={12}>
-                        <Button disabled={author === '' && name === '' && details === ''} onClick={isEditMode ? handlerClickEdit : handlerClickSave}>{!isEditMode ? 'Save' : 'Save changes'}</Button>
-                        <Button disabled={author === '' && name === '' && details === ''} onClick={handlerCancelForm}>{isEditMode ? 'Cancel' : 'Clean'}</Button>
-                    </Col>
-                </Col>
-            </Row>
         </Card>
-    </div>
+    </Modal>
 }
