@@ -5,12 +5,11 @@ import { NoteContext } from './Data/note.context';
 import 'antd/dist/antd.css';
 import { NoteList } from './components/List';
 import { FormNote } from './components/NoteForm';
-import { Note } from './models/db/note';
 import { useState } from 'react';
 
 function App() {
   const d = BuildChecker()
-  const [note, setNote] = useState({} as Note | undefined)
+  const [note, setNote] = useState(undefined)
   const initialContext = {
     noteTable: new NoteContext(),
     noteToEdit: note,
