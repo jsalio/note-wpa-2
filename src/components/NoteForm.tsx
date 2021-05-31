@@ -76,7 +76,7 @@ export const FormNote: React.FC<{ online: () => boolean }> = (prop) => {
             <Row>
                 <Col span={24}>
                     <Col span={12}>
-                        <Button onClick={isEditMode ? handlerClickEdit : handlerClickSave}>{!isEditMode ? 'Save' : 'Save changes'}</Button>
+                        <Button disabled={author === '' && name === '' && details === ''} onClick={isEditMode ? handlerClickEdit : handlerClickSave}>{!isEditMode ? 'Save' : 'Save changes'}</Button>
                         <Button disabled={author === '' && name === '' && details === ''} onClick={handlerCancelForm}>{isEditMode ? 'Cancel' : 'Clean'}</Button>
                     </Col>
                 </Col>
